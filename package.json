@@ -43,6 +43,8 @@
   ],
   "dependencies": {
     "@dfinity/auth-client": "^0.15.1",
-    "@dfinity/identity": "^0.15.1"
+    "@dfinity/identity": "^0.15.1",
+    "lit-html": "^2.6.1",
+    "ts-loader": "^9.4.2"
   }
 }

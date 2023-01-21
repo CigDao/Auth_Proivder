@@ -1,6 +1,7 @@
 import { Delegation, DelegationChain } from '@dfinity/identity';
 import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
- 
+import { renderIndex } from './views';
+
 // Your application's name (URI encoded)
  const APPLICATION_NAME = "Your%20Application%20Name";
 
@@ -14,6 +15,8 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
  const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
  
  const init = async () => {
+  renderIndex();
+
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
 	const sessionPublicKey = urlParams.get('sessionPublicKey');
