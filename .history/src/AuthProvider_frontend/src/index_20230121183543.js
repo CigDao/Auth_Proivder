@@ -12,7 +12,8 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
  // Replace https://identity.ic0.app with NFID_AUTH_URL
  // as the identityProvider for authClient.login({}) 
  const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
- 
+ const loginButton = document.getElementById('loginButton') ;
+ const retryButton = document.getElementById('retryButton') ;
  const init = async () => {
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
@@ -22,8 +23,7 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 	let idpWindow;
 	let withHash = NFID_AUTH_URL;
 
-	const loginButton = document.getElementById('loginButton') ;
-	const retryButton = document.getElementById('retryButton') ;
+
 	const tips = document.getElementById('tips') ;
 	const status = document.getElementById('status') ;
 
@@ -31,6 +31,7 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 
 	function runListener() {
 		setTimeout(() => {
+      console.log(idpWindow);
 			idpWindow = window.open(withHash, 'idpWindow');
 			loginButton.onclick = () => {
 				loginButton.innerText = idpWindow ? 'Redirecting' : 'Click me to login';
@@ -114,9 +115,9 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 		});
 	}
 };
-init().then(() => {
-  const loginButton = document.getElementById('loginButton') ;
-  loginButton.click();
-});
+window.onload = (event) => {
+  init();
+  console.log("this happened")
+};
 
 

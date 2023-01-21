@@ -1,3 +1,5 @@
+import { AuthClient } from "@dfinity/auth-client";
+import { renderIndex } from './views';
 import { Delegation, DelegationChain } from '@dfinity/identity';
 import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
  
@@ -13,19 +15,21 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
  // as the identityProvider for authClient.login({}) 
  const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
  
+
+
  const init = async () => {
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
 	const sessionPublicKey = urlParams.get('sessionPublicKey');
 	const callbackUri = urlParams.get('callback_uri');
 
-	let idpWindow;
+	let idpWindow: Window | null;
 	let withHash = NFID_AUTH_URL;
 
-	const loginButton = document.getElementById('loginButton') ;
-	const retryButton = document.getElementById('retryButton') ;
-	const tips = document.getElementById('tips') ;
-	const status = document.getElementById('status') ;
+	const loginButton = document.getElementById('loginButton') as HTMLButtonElement;
+	const retryButton = document.getElementById('retryButton') as HTMLButtonElement;
+	const tips = document.getElementById('tips') as HTMLElement;
+	const status = document.getElementById('status') as HTMLElement;
 
 	window.onload = runListener;
 
@@ -43,10 +47,9 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 			switch (message.kind) {
 				case 'authorize-ready': {
 					// IDP is ready. Send a message to request authorization.
-
 					let request = {
 						kind: 'authorize-client',
-						sessionPublicKey: new Uint8Array(fromHexString(sessionPublicKey)),
+						sessionPublicKey: new Uint8Array(fromHexString(sessionPublicKey!)),
 						maxTimeToLive: undefined,
 					};
 					status.innerText = 'Authorization Required';
@@ -57,11 +60,11 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 						idpWindow = window.open(withHash, 'idpWindow');
 					};
 					retryButton.className = 'hide';
-					idpWindow.postMessage(request, withHash);
+					idpWindow!.postMessage(request, withHash!);
 					break;
 				}
 				case 'authorize-client-success': {
-					idpWindow.close();
+					idpWindow!.close();
 					const delegations = message.delegations.map((signedDelegation) => {
 						return {
 							delegation: new Delegation(
@@ -78,7 +81,7 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 					);
 					const json = JSON.stringify(delegationChain.toJSON());
 
-					window.removeEventListener('message', listener);
+					window.removeEventListener('message', listener as any);
 					status.innerText = 'Authorization Success';
 					tips.innerText = 'If this window is not closed, please click this button! ';
 					loginButton.innerText = 'Return To App';
@@ -91,8 +94,8 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 				}
 
 				case 'authorize-client-failure': {
-					idpWindow.close();
-					window.removeEventListener('message', listener);
+					idpWindow!.close();
+					window.removeEventListener('message', listener as any);
 					status.innerText = 'Authorization Failed';
 					tips.innerText = 'Please choose following: ';
 					loginButton.innerText = 'Return To App';
@@ -114,9 +117,6 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 		});
 	}
 };
-init().then(() => {
-  const loginButton = document.getElementById('loginButton') ;
-  loginButton.click();
-});
 
+init();
 

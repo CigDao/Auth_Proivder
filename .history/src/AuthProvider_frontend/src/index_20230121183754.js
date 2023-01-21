@@ -115,8 +115,7 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 	}
 };
 init().then(() => {
-  const loginButton = document.getElementById('loginButton') ;
-  loginButton.click();
+  
 });
 
 

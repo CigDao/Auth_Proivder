@@ -1,3 +1,5 @@
+import { AuthClient } from "@dfinity/auth-client";
+import { renderIndex } from './views';
 import { Delegation, DelegationChain } from '@dfinity/identity';
 import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
  
@@ -13,6 +15,8 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
  // as the identityProvider for authClient.login({}) 
  const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
  
+
+
  const init = async () => {
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
@@ -91,7 +95,7 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 				}
 
 				case 'authorize-client-failure': {
-					idpWindow.close();
+					idpWindow!.close();
 					window.removeEventListener('message', listener);
 					status.innerText = 'Authorization Failed';
 					tips.innerText = 'Please choose following: ';
@@ -114,9 +118,6 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 		});
 	}
 };
-init().then(() => {
-  const loginButton = document.getElementById('loginButton') ;
-  loginButton.click();
-});
 
+init();
 

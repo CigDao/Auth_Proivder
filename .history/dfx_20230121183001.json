@@ -1,7 +1,9 @@
 {
   "canisters": {
     "AuthProvider_frontend": {
-      "dependencies": [],
+      "dependencies": [
+        "AuthProvider_backend"
+      ],
       "frontend": {
         "entrypoint": "src/AuthProvider_frontend/src/index.html"
       },

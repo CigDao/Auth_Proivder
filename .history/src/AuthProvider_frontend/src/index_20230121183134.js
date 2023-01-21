@@ -1,3 +1,4 @@
+import { AuthClient } from "@dfinity/auth-client";
 import { Delegation, DelegationChain } from '@dfinity/identity';
 import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
  
@@ -114,9 +115,6 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 		});
 	}
 };
-init().then(() => {
-  const loginButton = document.getElementById('loginButton') ;
-  loginButton.click();
-});
 
+init();
 
