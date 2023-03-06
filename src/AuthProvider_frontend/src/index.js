@@ -3,19 +3,19 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 import { renderIndex } from './views';
 
 // Your application's name (URI encoded)
- const APPLICATION_NAME = "Your%20Application%20Name";
+const APPLICATION_NAME = "Cig%20Social";
 
- // URL to 37x37px logo of your application (URI encoded)
- const APPLICATION_LOGO_URL = "https://nfid.one/icons/favicon-96x96.png";
+// URL to 37x37px logo of your application (URI encoded)
+const APPLICATION_LOGO_URL = "https://cigdao.org/cigdaologo.png";
 
- const AUTH_PATH = "/authenticate/?applicationName="+APPLICATION_NAME+"&applicationLogo="+APPLICATION_LOGO_URL+"#authorize";
+const AUTH_PATH = "/authenticate/?applicationName=" + APPLICATION_NAME + "&applicationLogo=" + APPLICATION_LOGO_URL + "#authorize";
 
- // Replace https://identity.ic0.app with NFID_AUTH_URL
- // as the identityProvider for authClient.login({}) 
- const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
- 
- const init = async () => {
-  renderIndex();
+// Replace https://identity.ic0.app with NFID_AUTH_URL
+// as the identityProvider for authClient.login({}) 
+const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
+
+const init = async () => {
+	renderIndex();
 
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
@@ -25,10 +25,10 @@ import { renderIndex } from './views';
 	let idpWindow;
 	let withHash = NFID_AUTH_URL;
 
-	const loginButton = document.getElementById('loginButton') ;
-	const retryButton = document.getElementById('retryButton') ;
-	const tips = document.getElementById('tips') ;
-	const status = document.getElementById('status') ;
+	const loginButton = document.getElementById('loginButton');
+	const retryButton = document.getElementById('retryButton');
+	const tips = document.getElementById('tips');
+	const status = document.getElementById('status');
 
 	window.onload = runListener;
 
@@ -82,10 +82,12 @@ import { renderIndex } from './views';
 					const json = JSON.stringify(delegationChain.toJSON());
 
 					window.removeEventListener('message', listener);
+					window.location.href = `${callbackUri}?success=true&&json=` + json;
 					status.innerText = 'Authorization Success';
 					tips.innerText = 'If this window is not closed, please click this button! ';
 					loginButton.innerText = 'Return To App';
 					loginButton.className = 'primary';
+
 					loginButton.onclick = () =>
 						(window.location.href = `${callbackUri}?success=true&&json=` + json);
 					retryButton.className = 'hide';
@@ -118,8 +120,6 @@ import { renderIndex } from './views';
 	}
 };
 init().then(() => {
-  const loginButton = document.getElementById('loginButton') ;
-  loginButton.click();
+	const loginButton = document.getElementById('loginButton');
+	loginButton.click();
 });
-
-
