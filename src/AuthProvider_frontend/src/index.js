@@ -22,7 +22,7 @@ const init = async () => {
 
 	let idpWindow;
 	let withHash;
-	switch (provider.toUpperCase()) {
+	switch (provider) {
 
 		case "NFID":
 			withHash = "https://nfid.one" + AUTH_PATH;
