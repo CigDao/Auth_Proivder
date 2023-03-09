@@ -1,6 +1,5 @@
 import { Delegation, DelegationChain } from '@dfinity/identity';
 import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
-import { renderIndex } from './views';
 
 // Your application's name (URI encoded)
  const APPLICATION_NAME = "Your%20Application%20Name";
@@ -12,18 +11,28 @@ import { renderIndex } from './views';
 
  // Replace https://identity.ic0.app with NFID_AUTH_URL
  // as the identityProvider for authClient.login({}) 
- const NFID_AUTH_URL = "https://nfid.one" + AUTH_PATH;
  
  const init = async () => {
-  renderIndex();
 
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
+	const provider = urlParams.get('provider');
 	const sessionPublicKey = urlParams.get('sessionPublicKey');
 	const callbackUri = urlParams.get('callback_uri');
 
 	let idpWindow;
-	let withHash = NFID_AUTH_URL;
+	let withHash;
+	switch (provider.toUpperCase()) {
+
+		case "NFID":
+			withHash = "https://nfid.one" + AUTH_PATH;
+			break;
+		case "II":
+			withHash = "https://identity.ic0.app/#authorize";
+			break;
+		default:
+			withHash = "https://nfid.one" + AUTH_PATH;
+	}
 
 	const loginButton = document.getElementById('loginButton') ;
 	const retryButton = document.getElementById('retryButton') ;
@@ -33,13 +42,13 @@ import { renderIndex } from './views';
 	window.onload = runListener;
 
 	function runListener() {
-		setTimeout(() => {
+		
+		idpWindow = window.open(withHash, 'idpWindow');
+		loginButton.onclick = () => {
+			loginButton.innerText = idpWindow ? 'Redirecting' : 'Click me to login';
 			idpWindow = window.open(withHash, 'idpWindow');
-			loginButton.onclick = () => {
-				loginButton.innerText = idpWindow ? 'Redirecting' : 'Click me to login';
-				idpWindow = window.open(withHash, 'idpWindow');
-			};
-		}, 1000);
+		};
+
 
 		let listener = window.addEventListener('message', function (event) {
 			let message = event.data;
@@ -95,11 +104,11 @@ import { renderIndex } from './views';
 
 				case 'authorize-client-failure': {
 					idpWindow.close();
+					loginButton.style.display = "none";
+					retryButton.style.display = "block";
 					window.removeEventListener('message', listener);
 					status.innerText = 'Authorization Failed';
 					tips.innerText = 'Please choose following: ';
-					loginButton.innerText = 'Return To App';
-					loginButton.className = '';
 					loginButton.onclick = () =>
 						(window.location.href = `${callbackUri}?success=false&&json=` + message.text);
 					retryButton.className = 'primary';
