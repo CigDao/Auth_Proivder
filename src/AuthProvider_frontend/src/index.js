@@ -2,12 +2,12 @@ import { Delegation, DelegationChain } from '@dfinity/identity';
 import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 
 // Your application's name (URI encoded)
-const APPLICATION_NAME = "Cig%20Social";
+const APPLICATION_NAME = "CigSocial";
 
 // URL to 37x37px logo of your application (URI encoded)
 const APPLICATION_LOGO_URL = "https://cigdao.org/cigdaologo.png";
 
-const AUTH_PATH = "/authenticate/?applicationName=" + APPLICATION_NAME + "&applicationLogo=" + APPLICATION_LOGO_URL + "#authorize";
+const AUTH_PATH = "/authenticate/?applicationName=" + encodeURIComponent(APPLICATION_NAME) + "&applicationLogo=" + encodeURIComponent(APPLICATION_LOGO_URL) + "#authorize";
 
 // Replace https://identity.ic0.app with NFID_AUTH_URL
 // as the identityProvider for authClient.login({}) 
@@ -45,7 +45,7 @@ const init = async () => {
 
 		idpWindow = window.open(withHash, 'idpWindow');
 		loginButton.onclick = () => {
-			loginButton.innerText = idpWindow ? 'Redirecting' : 'Click me to login';
+			loginButton.innerText = idpWindow ? 'Redirecting' : 'Login';
 			idpWindow = window.open(withHash, 'idpWindow');
 		};
 
