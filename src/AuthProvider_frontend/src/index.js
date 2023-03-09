@@ -2,17 +2,17 @@ import { Delegation, DelegationChain } from '@dfinity/identity';
 import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 
 // Your application's name (URI encoded)
- const APPLICATION_NAME = "Your%20Application%20Name";
+const APPLICATION_NAME = "Cig%20Social";
 
- // URL to 37x37px logo of your application (URI encoded)
- const APPLICATION_LOGO_URL = "https://nfid.one/icons/favicon-96x96.png";
+// URL to 37x37px logo of your application (URI encoded)
+const APPLICATION_LOGO_URL = "https://cigdao.org/cigdaologo.png";
 
- const AUTH_PATH = "/authenticate/?applicationName="+APPLICATION_NAME+"&applicationLogo="+APPLICATION_LOGO_URL+"#authorize";
+const AUTH_PATH = "/authenticate/?applicationName=" + APPLICATION_NAME + "&applicationLogo=" + APPLICATION_LOGO_URL + "#authorize";
 
- // Replace https://identity.ic0.app with NFID_AUTH_URL
- // as the identityProvider for authClient.login({}) 
- 
- const init = async () => {
+// Replace https://identity.ic0.app with NFID_AUTH_URL
+// as the identityProvider for authClient.login({}) 
+
+const init = async () => {
 
 	const queryString = window.location.search;
 	const urlParams = new URLSearchParams(queryString);
@@ -34,15 +34,15 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 			withHash = "https://nfid.one" + AUTH_PATH;
 	}
 
-	const loginButton = document.getElementById('loginButton') ;
-	const retryButton = document.getElementById('retryButton') ;
-	const tips = document.getElementById('tips') ;
-	const status = document.getElementById('status') ;
+	const loginButton = document.getElementById('loginButton');
+	const retryButton = document.getElementById('retryButton');
+	const tips = document.getElementById('tips');
+	const status = document.getElementById('status');
 
 	window.onload = runListener;
 
 	function runListener() {
-		
+
 		idpWindow = window.open(withHash, 'idpWindow');
 		loginButton.onclick = () => {
 			loginButton.innerText = idpWindow ? 'Redirecting' : 'Click me to login';
@@ -127,8 +127,8 @@ import { fromHexString } from '@dfinity/candid/lib/cjs/utils/buffer';
 	}
 };
 init().then(() => {
-  const loginButton = document.getElementById('loginButton') ;
-  loginButton.click();
+	const loginButton = document.getElementById('loginButton');
+	loginButton.click();
 });
 
 
